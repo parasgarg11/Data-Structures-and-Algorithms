@@ -130,20 +130,65 @@ class Trie {
 		// Return true or false.
         
         //Store all the words first before searching it's reverse
-        for(int i=0;i<arr.size();i++)
-            this->insertWord(arr[i]);
+        for(int i=0; i<arr.size(); i++){
+            this->add(arr[i]);
+        }
+        
         bool ans;
-        for(int i=0;i<arr.size();i++){
-            string out=reverse(arr[i]);
+        
+        for(int i=0; i<arr.size(); i++){
             
-            ans=search(root,out) || search(root,out.substr(1)); //Pallindrom can have odd number of letters
+            string out= arr[i];  // the word itself is a palindrome or not
+            out = reverse(out);        
+            ans = search(root, out);
+            
+            if(ans){
+                return true;
+            }
+            
+            int len = arr[i].length();
+            string str = arr[i];
+            int j=0;
+            while(j<len-1){
+                
+                if(str[j]==str[j+1]){     // checking first mismatch char   e.g. mmmmabc
+                    j++;
+                }
+                else{
+                    break;
+                }
+            }
+            
+            out = str.substr(j+1);
+            out = reverse(out);
+            ans = search(root, out);
+
             if(ans)
-                break;
+                return true;
+            
+            //3rd case 
+            str = arr[i];
+            j=len-1;
+
+            while(j>0){                
+                if(str[j]==str[j-1]){    //checking first mismatch char e.g. abcmmmm
+                    j--;
+                }
+                else{
+                    break;
+                }
+            }
+            
+            out = str.substr(0, j);
+            out = reverse(out);
+            ans = search(root, out);
+            
+            if(ans){
+                return true;
+            }
         }
         return ans;
-           
-        
-	}
+    }
 };
 
 
